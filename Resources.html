@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resource Library – Cloud 7</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f7fc;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        nav {
+            background: #6c5ce7;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .page-section {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+        h1 {
+            color: #6c5ce7;
+            text-align: center;
+        }
+        .card {
+            background: #ffe0e0;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .category {
+            background: #d6f5f5;
+            border-radius: 10px;
+            padding: 10px 15px;
+            display: inline-block;
+            margin: 5px 5px 15px 0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .category:hover {
+            background: #6c5ce7;
+            color: white;
+        }
+        .search-bar input {
+            width: 95%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .resource-card {
+            background: #f0e6ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .resource-card h4 {
+            margin: 0 0 5px 0;
+            color: #6c5ce7;
+        }
+        .resource-card p {
+            margin: 5px 0;
+        }
+        .btn-view {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-view:hover {
+            background: #341f97;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Cloud 7</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="page-section">
+    <h1>Resource Library</h1>
+    <p style="text-align:center; font-size:18px; margin-bottom:30px;">Curated articles, guides, and tools to support your mental wellness journey</p>
+
+    <!-- Crisis Support Section -->
+    <h2 style="color:#6c5ce7;">Crisis Support - Available 24/7</h2>
+    <div class="card">
+        <p>📞 <strong>National Suicide Prevention Lifeline:</strong> <a href="https://suicidepreventionlifeline.org/" target="_blank">988</a> – 24/7 crisis support</p>
+        <p>💬 <strong>Crisis Text Line:</strong> <a href="https://www.crisistextline.org/" target="_blank">Text 'HELLO' to 741741</a> – Text-based support</p>
+        <p>🏥 <strong>NHS Mental Health Helpline:</strong> <a href="https://www.nhs.uk/mental-health/" target="_blank">111 (Option 2)</a> – 24/7 urgent mental health support</p>
+        <p>🤝 <strong>Samaritans:</strong> <a href="https://www.samaritans.org/" target="_blank">116 123</a> – Free listening service</p>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search resources..." onkeyup="filterResources()">
+    </div>
+
+    <!-- Categories -->
+    <div>
+        <span class="category" onclick="filterCategory('All')">All Categories</span>
+        <span class="category" onclick="filterCategory('Anxiety')">😰 Anxiety</span>
+        <span class="category" onclick="filterCategory('Depression')">💙 Depression</span>
+        <span class="category" onclick="filterCategory('Stress Management')">🧘 Stress Management</span>
+        <span class="category" onclick="filterCategory('Self Care')">🌿 Self Care</span>
+        <span class="category" onclick="filterCategory('Relationships')">💕 Relationships</span>
+        <span class="category" onclick="filterCategory('Sleep')">😴 Sleep</span>
+        <span class="category" onclick="filterCategory('General Wellness')">✨ General Wellness</span>
+        <span class="category" onclick="filterCategory('Crisis Support')">🆘 Crisis Support</span>
+    </div>
+
+    <!-- Resource Cards -->
+    <div id="resourcesContainer"></div>
+
+</div>
+
+<footer style="text-align:center; padding:20px; background:#f0e6ff;">© 2025 Cloud 7</footer>
+
+<script>
+// Example resources
+const resources = [
+    {
+        category: "Stress Management",
+        title: "5-Minute Meditation for Stress Relief",
+        description: "A guided meditation video to help you reduce stress and find calm in your day.",
+        duration: "5 min",
+        link: "https://www.youtube.com/watch?v=inpok4MKVLM"
+    },
+    {
+        category: "Anxiety",
+        title: "Understanding Anxiety: A Comprehensive Guide",
+        description: "Learn about the different types of anxiety disorders, their symptoms, and coping strategies.",
+        duration: "15 min",
+        link: "https://www.verywellmind.com/anxiety-4157282"
+    },
+    {
+        category: "Self Care",
+        title: "Daily Self-Care Checklist",
+        description: "A downloadable worksheet to help you track and maintain daily self-care habits.",
+        duration: "5 min",
+        link: "https://www.therapistaid.com/worksheets/self-care-plan"
+    },
+    {
+        category: "Crisis Support",
+        title: "Crisis Support Resources UK",
+        description: "Comprehensive list of emergency mental health services and crisis helplines in the UK.",
+        duration: "3 min",
+        link: "https://www.nhs.uk/mental-health/urgent-help-24-7/"
+    },
+    {
+        category: "General Wellness",
+        title: "Mindfulness for Beginners",
+        description: "An introduction to mindfulness practices and how they can improve your mental wellbeing.",
+        duration: "8 min",
+        link: "https://www.mindful.org/meditation/mindfulness-getting-started/"
+    },
+    {
+        category: "Depression",
+        title: "Managing Depression: What Works",
+        description: "Evidence-based approaches to managing depression, from therapy to lifestyle changes.",
+        duration: "20 min",
+        link: "https://www.psycom.net/depression-treatment-options"
+    }
+];
+
+// Display all resources
+function displayResources(filterCategoryName="All") {
+    const container = document.getElementById("resourcesContainer");
+    container.innerHTML = "";
+    resources.forEach(r => {
+        if(filterCategoryName === "All" || r.category === filterCategoryName) {
+            const card = document.createElement("div");
+            card.className = "resource-card";
+            card.innerHTML = `
+                <h4>${r.title}</h4>
+                <p>${r.description}</p>
+                <p>Duration: ${r.duration}</p>
+                <a href="${r.link}" target="_blank"><button class="btn-view">View Resource</button></a>
+            `;
+            container.appendChild(card);
+        }
+    });
+}
+
+// Filter by category
+function filterCategory(category) {
+    displayResources(category);
+}
+
+// Search resources
+function filterResources() {
+    let query = document.getElementById("searchInput").value.toLowerCase();
+    const filtered = resources.filter(r => r.title.toLowerCase().includes(query) || r.description.toLowerCase().includes(query));
+    const container = document.getElementById("resourcesContainer");
+    container.innerHTML = "";
+    filtered.forEach(r => {
+        const card = document.createElement("div");
+        card.className = "resource-card";
+        card.innerHTML = `
+            <h4>${r.title}</h4>
+            <p>${r.description}</p>
+            <p>Duration: ${r.duration}</p>
+            <a href="${r.link}" target="_blank"><button class="btn-view">View Resource</button></a>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Initialize
+displayResources();
+</script>
+
+</body>
+</html>

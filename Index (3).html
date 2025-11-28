@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud 7 – Mental Wellness</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom right, #f3e8ff, #d0f0f0, #ffe6e0);
+        color: #333;
+    }
+    nav {
+        background: #6c5ce7;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+    }
+    nav a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    nav a:hover { text-decoration: underline; }
+    .hero { text-align: center; padding: 100px 20px 50px 20px; }
+    .hero h1 { font-size: 2.5rem; color: #6c5ce7; margin-bottom: 20px; }
+    .hero p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px auto; line-height: 1.6; color: #444; }
+    .hero .buttons button { margin: 10px; padding: 15px 30px; font-size: 1rem; border: none; border-radius: 10px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+    .btn-mood { background: #55efc4; color: #fff; }
+    .btn-session { background: #ff7675; color: #fff; }
+    .btn-join { background: #a29bfe; color: #fff; }
+    .btn-mood:hover { background: #00b894; }
+    .btn-session:hover { background: #d63031; }
+    .btn-join:hover { background: #6c5ce7; }
+    .stats, .tools { max-width: 1000px; margin: 50px auto; padding: 20px; display: flex; flex-wrap: wrap; justify-content: space-around; text-align: center; }
+    .stat, .tool { background: rgba(255,255,255,0.9); border-radius: 20px; padding: 30px 20px; margin: 20px; flex: 1 1 250px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    .stat h2 { font-size: 2rem; margin: 10px 0; color: #6c5ce7; }
+    .stat p { margin: 5px 0; font-size: 1.1rem; }
+    .tool h3 { color: #ff7675; margin-bottom: 15px; }
+    .tool p { color: #444; line-height: 1.4; }
+    footer { text-align: center; padding: 20px; background: #f0e6ff; margin-top: 50px; }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Cloud 7</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>It's okay to not be okay. We're here for you.</h1>
+    <p>Find Peace. Track Progress. Heal Together.<br>
+    You don't have to face this alone. Cloud 7 is your gentle companion for healing—a safe haven where your feelings are valid, your struggles are heard, and professional support is just a click away.</p>
+    <div class="buttons">
+        <button class="btn-mood" onclick="window.location='mood.html'">Start Tracking Your Mood</button>
+        <button class="btn-session" onclick="window.location='book.html'">Book a Session</button>
+        <button class="btn-join">Join 10,000+ users</button>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="stat">
+        <h2 id="moodEmoji">😊</h2>
+        <p id="moodText">Feeling Good</p>
+        <p>Today's Mood</p>
+    </div>
+    <div class="stat">
+        <h2 id="weekProgress">0</h2>
+        <p>This Week's Progress</p>
+    </div>
+    <div class="stat">
+        <h2 id="journalEntries">0</h2>
+        <p>Journal Entries</p>
+    </div>
+    <div class="stat">
+        <h2 id="sessionsBooked">0</h2>
+        <p>Sessions Booked</p>
+    </div>
+</section>
+
+<section class="tools">
+    <div class="tool">
+        <h3>Mood Tracking</h3>
+        <p>Monitor your emotional well-being with daily mood logs and insightful trends.</p>
+    </div>
+    <div class="tool">
+        <h3>Private Journaling</h3>
+        <p>Document your journey in a secure, confidential space designed for reflection.</p>
+    </div>
+    <div class="tool">
+        <h3>Professional Support</h3>
+        <p>Book sessions with licensed therapists online or in-person, with anonymity options.</p>
+    </div>
+    <div class="tool">
+        <h3>Safe & Confidential</h3>
+        <p>Your privacy is our priority. All data is encrypted and securely stored.</p>
+    </div>
+</section>
+
+<footer>
+    © 2025 Cloud 7
+</footer>
+
+<script>
+    // Example: Fetching user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('cloud7UserData')) || {
+        mood: '😊',
+        moodText: 'Feeling Good',
+        weekProgress: 0,
+        journalEntries: 0,
+        sessionsBooked: 0
+    };
+
+    document.getElementById('moodEmoji').innerText = userData.mood;
+    document.getElementById('moodText').innerText = userData.moodText;
+    document.getElementById('weekProgress').innerText = userData.weekProgress;
+    document.getElementById('journalEntries').innerText = userData.journalEntries;
+    document.getElementById('sessionsBooked').innerText = userData.sessionsBooked;
+</script>
+
+</body>
+</html>

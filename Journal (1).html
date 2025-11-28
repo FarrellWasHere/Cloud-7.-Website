@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Journal – Cloud 7</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f7fc;
+            margin: 0; padding: 0; color: #333;
+        }
+        nav {
+            background: #6c5ce7;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a { color:white; margin-left:20px; text-decoration:none; font-weight:bold;}
+        .page-section { max-width:900px; margin:auto; padding:30px 20px; }
+        h1 { color:#6c5ce7; text-align:center; }
+        .card {
+            background:#ffe0e0;
+            border-radius:15px;
+            padding:25px;
+            margin-bottom:30px;
+        }
+        input[type=text], textarea, select {
+            width: 90%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:15px; font-size:16px;
+        }
+        input[type=checkbox] { margin-right:10px; }
+        .btn-save {
+            background:#6c5ce7; color:white; border:none; padding:12px 25px; font-size:16px; border-radius:10px; cursor:pointer; transition:0.3s;
+        }
+        .btn-save:hover { background:#341f97; }
+        .summary { background:#d6f5f5; border-radius:15px; padding:20px; margin-bottom:30px; }
+        .entry-card { background:#f0e6ff; border-radius:15px; padding:20px; margin-bottom:20px; }
+        .entry-card h4 { margin:0 0 5px 0; color:#6c5ce7; }
+        .entry-card p { margin:5px 0; }
+        .private { font-style:italic; color:#555; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Cloud 7</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="page-section">
+    <h1>My Journal</h1>
+    <p style="text-align:center; font-size:18px; margin-bottom:30px;">Your private space for thoughts and reflections</p>
+
+    <!-- Summary -->
+    <div class="summary">
+        <p>Total Entries: <span id="totalEntries">0</span></p>
+        <p>This Month: <span id="thisMonthEntries">0</span></p>
+        <p>Private Entries: <span id="privateEntries">0</span></p>
+    </div>
+
+    <!-- New Entry -->
+    <div class="card">
+        <h3>New Journal Entry</h3>
+        <p><strong>Date:</strong> <span id="entryDate"></span></p>
+        <p><strong>Mood Tag:</strong> 
+            <select id="moodTag">
+                <option>💭 Reflective</option>
+                <option>😊 Happy</option>
+                <option>😐 Okay</option>
+                <option>😔 Sad</option>
+                <option>😡 Frustrated</option>
+                <option>😴 Tired</option>
+            </select>
+        </p>
+        <input type="text" id="entryTitle" placeholder="Title (Optional)">
+        <textarea id="entryText" rows="5" placeholder="Write your thoughts, feelings, and reflections..."></textarea>
+        <p><input type="checkbox" id="keepPrivate">Keep this entry private</p>
+        <button class="btn-save" onclick="saveEntry()">Save Entry</button>
+    </div>
+
+    <!-- Past Entries -->
+    <h2 style="color:#6c5ce7;">Previous Entries</h2>
+    <div id="entriesContainer"></div>
+
+</div>
+
+<footer style="text-align:center; padding:20px; background:#f0e6ff;">© 2025 Cloud 7</footer>
+
+<script>
+// Set today's date
+document.getElementById("entryDate").textContent = new Date().toLocaleDateString();
+
+// Save journal entry
+function saveEntry() {
+    let title = document.getElementById("entryTitle").value.trim();
+    let text = document.getElementById("entryText").value.trim();
+    let mood = document.getElementById("moodTag").value;
+    let isPrivate = document.getElementById("keepPrivate").checked;
+    let date = new Date().toLocaleDateString();
+
+    if(!text) return alert("Please write something before saving!");
+
+    let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+    entries.unshift({ date, title, text, mood, isPrivate }); // newest first
+    localStorage.setItem("journalEntries", JSON.stringify(entries));
+
+    displaySummary();
+    displayEntries();
+    document.getElementById("entryTitle").value = "";
+    document.getElementById("entryText").value = "";
+    document.getElementById("keepPrivate").checked = false;
+}
+
+// Display summary
+function displaySummary() {
+    let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+    let total = entries.length;
+    let thisMonth = entries.filter(e => new Date(e.date).getMonth() === new Date().getMonth()).length;
+    let privateCount = entries.filter(e => e.isPrivate).length;
+
+    document.getElementById("totalEntries").textContent = total;
+    document.getElementById("thisMonthEntries").textContent = thisMonth;
+    document.getElementById("privateEntries").textContent = privateCount;
+}
+
+// Display all entries
+function displayEntries() {
+    let container = document.getElementById("entriesContainer");
+    container.innerHTML = "";
+    let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+
+    entries.forEach(entry => {
+        let card = document.createElement("div");
+        card.className = "entry-card";
+
+        let titleText = entry.title ? entry.title : "Untitled Entry";
+        let moodText = entry.mood;
+
+        let content = `<h4>${titleText} - ${entry.date}</h4>
+                       <p>Mood: ${moodText}</p>`;
+
+        if(entry.isPrivate) {
+            content += `<p class="private">Private Entry</p>`;
+        } else {
+            content += `<p>${entry.text}</p>`;
+        }
+
+        card.innerHTML = content;
+        container.appendChild(card);
+    });
+}
+
+// Initialize
+displaySummary();
+displayEntries();
+</script>
+
+</body>
+</html>

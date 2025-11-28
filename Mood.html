@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mood Tracker – Cloud 7</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f7fc; 
+            margin: 0; padding: 0; color: #333;
+        }
+        nav { background: #6c5ce7; padding: 15px 30px; display:flex; justify-content:space-between; align-items:center; color:white;}
+        nav a { color:white; margin-left:20px; text-decoration:none; font-weight:bold;}
+        .page-section { max-width:900px; margin:auto; padding:30px 20px; }
+        h1 { color:#6c5ce7; text-align:center; }
+        .card { background:#ffe0e0; border-radius:15px; padding:25px; margin-bottom:30px;}
+        .card h3 { margin-top:0; }
+        input[type=text], textarea, input[type=number] {
+            width: 90%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:15px; font-size:16px;
+        }
+        input[type=range] { width:90%; }
+        .btn-mood { background:#6c5ce7; color:white; border:none; padding:12px 25px; font-size:16px; border-radius:10px; cursor:pointer; transition:0.3s; }
+        .btn-mood:hover { background:#341f97; }
+        .summary { background:#d6f5f5; border-radius:15px; padding:20px; margin-top:20px; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Cloud 7</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="page-section">
+    <h1>Your Daily Mood</h1>
+    <div class="card">
+        <h3>How are you feeling today?</h3>
+        <input type="text" id="overallMood" placeholder="😄 Happy / 😐 Okay / 😔 Sad">
+        <p><strong>Stress Level:</strong> <span id="stressVal">5</span>/10</p>
+        <input type="range" id="stressLevel" min="1" max="10" value="5" oninput="stressVal.textContent=this.value;">
+        <p><strong>Energy Level:</strong> <span id="energyVal">5</span>/10</p>
+        <input type="range" id="energyLevel" min="1" max="10" value="5" oninput="energyVal.textContent=this.value;">
+        <p><strong>Sleep Quality:</strong> <span id="sleepVal">5</span>/10</p>
+        <input type="range" id="sleepQuality" min="1" max="10" value="5" oninput="sleepVal.textContent=this.value;">
+        <textarea id="notes" placeholder="Notes (optional): What influenced your mood today?"></textarea>
+        <br>
+        <button class="btn-mood" onclick="saveMood()">Save Mood Entry</button>
+    </div>
+
+    <div class="summary">
+        <h3>Summary</h3>
+        <p>Total Entries: <span id="totalEntries">0</span></p>
+        <p>Avg Stress: <span id="avgStress">0</span>/10</p>
+        <p>Avg Energy: <span id="avgEnergy">0</span>/10</p>
+        <p>Avg Sleep: <span id="avgSleep">0</span>/10</p>
+    </div>
+
+</div>
+
+<footer style="text-align:center; padding:20px; background:#f0e6ff;">© 2025 Cloud 7</footer>
+
+<script>
+function saveMood() {
+    let mood = document.getElementById("overallMood").value.trim();
+    let stress = parseInt(document.getElementById("stressLevel").value);
+    let energy = parseInt(document.getElementById("energyLevel").value);
+    let sleep = parseInt(document.getElementById("sleepQuality").value);
+    let notes = document.getElementById("notes").value.trim();
+    let date = new Date().toLocaleDateString();
+
+    if(!mood) return alert("Please enter your mood!");
+
+    let moods = JSON.parse(localStorage.getItem("moods") || "[]");
+    moods.push({ date, mood, stress, energy, sleep, notes });
+    localStorage.setItem("moods", JSON.stringify(moods));
+
+    displaySummary();
+    document.getElementById("overallMood").value="";
+    document.getElementById("notes").value="";
+}
+
+function displaySummary() {
+    let moods = JSON.parse(localStorage.getItem("moods") || "[]");
+    let total = moods.length;
+    let sumStress=0, sumEnergy=0, sumSleep=0;
+
+    moods.forEach(entry => {
+        sumStress += entry.stress;
+        sumEnergy += entry.energy;
+        sumSleep += entry.sleep;
+    });
+
+    document.getElementById("totalEntries").textContent = total;
+    document.getElementById("avgStress").textContent = total? (sumStress/total).toFixed(1) : 0;
+    document.getElementById("avgEnergy").textContent = total? (sumEnergy/total).toFixed(1) : 0;
+    document.getElementById("avgSleep").textContent = total? (sumSleep/total).toFixed(1) : 0;
+}
+
+// Initialize summary on page load
+displaySummary();
+</script>
+
+</body>
+</html>

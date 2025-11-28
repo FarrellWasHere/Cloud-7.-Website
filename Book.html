@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book a Session – Cloud 7</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f7fc;
+            margin: 0; padding: 0; color: #333;
+        }
+        nav {
+            background: #6c5ce7;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        nav a { color:white; margin-left:20px; text-decoration:none; font-weight:bold;}
+        .page-section { max-width:900px; margin:auto; padding:30px 20px; }
+        h1 { color:#6c5ce7; text-align:center; }
+        .card {
+            background:#ffe0e0;
+            border-radius:15px;
+            padding:25px;
+            margin-bottom:30px;
+        }
+        input[type=text], input[type=date], input[type=time], select {
+            width: 90%; padding:10px; border-radius:10px; border:1px solid #ccc; margin-bottom:15px; font-size:16px;
+        }
+        .btn-book {
+            background:#6c5ce7; color:white; border:none; padding:12px 25px; font-size:16px; border-radius:10px; cursor:pointer; transition:0.3s;
+        }
+        .btn-book:hover { background:#341f97; }
+        .summary { background:#d6f5f5; border-radius:15px; padding:20px; margin-bottom:30px; }
+        .session-card { background:#f0e6ff; border-radius:15px; padding:20px; margin-bottom:20px; }
+        .session-card h4 { margin:0 0 5px 0; color:#6c5ce7; }
+        .session-card p { margin:5px 0; }
+        .no-sessions { font-style:italic; color:#555; text-align:center; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Cloud 7</div>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="mood.html">Mood</a>
+        <a href="journal.html">Journal</a>
+        <a href="book.html">Book</a>
+        <a href="resources.html">Resources</a>
+        <a href="contact.html">Support</a>
+        <a href="login.html">Login</a>
+    </div>
+</nav>
+
+<div class="page-section">
+    <h1>Book a Session</h1>
+    <p style="text-align:center; font-size:18px; margin-bottom:30px;">Connect with licensed mental health professionals</p>
+
+    <!-- Summary -->
+    <div class="summary">
+        <p>Total Sessions: <span id="totalSessions">0</span></p>
+        <p>Upcoming: <span id="upcomingSessions">0</span></p>
+        <p>Completed: <span id="completedSessions">0</span></p>
+    </div>
+
+    <!-- New Appointment -->
+    <div class="card">
+        <h3>+ New Appointment</h3>
+        <input type="text" id="sessionTitle" placeholder="Session Title or Therapist Name">
+        <input type="date" id="sessionDate">
+        <input type="time" id="sessionTime">
+        <select id="sessionMode">
+            <option>Online</option>
+            <option>In-Person</option>
+        </select>
+        <button class="btn-book" onclick="bookSession()">Book Your First Session</button>
+    </div>
+
+    <!-- Past / Upcoming Sessions -->
+    <h2 style="color:#6c5ce7;">Your Sessions</h2>
+    <div id="sessionsContainer"></div>
+</div>
+
+<footer style="text-align:center; padding:20px; background:#f0e6ff;">© 2025 Cloud 7</footer>
+
+<script>
+function bookSession() {
+    let title = document.getElementById("sessionTitle").value.trim();
+    let date = document.getElementById("sessionDate").value;
+    let time = document.getElementById("sessionTime").value;
+    let mode = document.getElementById("sessionMode").value;
+
+    if(!title || !date || !time) return alert("Please fill in all fields to book a session!");
+
+    let sessions = JSON.parse(localStorage.getItem("sessions") || "[]");
+    sessions.push({ title, date, time, mode, completed: false });
+    localStorage.setItem("sessions", JSON.stringify(sessions));
+
+    displaySessions();
+
+    document.getElementById("sessionTitle").value = "";
+    document.getElementById("sessionDate").value = "";
+    document.getElementById("sessionTime").value = "";
+}
+
+// Display sessions and summary
+function displaySessions() {
+    let container = document.getElementById("sessionsContainer");
+    container.innerHTML = "";
+
+    let sessions = JSON.parse(localStorage.getItem("sessions") || "[]");
+    let total = sessions.length;
+    let upcoming = sessions.filter(s => !s.completed).length;
+    let completed = sessions.filter(s => s.completed).length;
+
+    document.getElementById("totalSessions").textContent = total;
+    document.getElementById("upcomingSessions").textContent = upcoming;
+    document.getElementById("completedSessions").textContent = completed;
+
+    if(sessions.length === 0) {
+        container.innerHTML = '<p class="no-sessions">No appointments yet.<br>Schedule your first session to get started.</p>';
+        return;
+    }
+
+    sessions.forEach((s, index) => {
+        let card = document.createElement("div");
+        card.className = "session-card";
+        card.innerHTML = `
+            <h4>${s.title} - ${s.date} ${s.time}</h4>
+            <p>Mode: ${s.mode}</p>
+            <p>Status: ${s.completed ? 'Completed' : 'Upcoming'}</p>
+            <button onclick="completeSession(${index})" style="background:#6c5ce7;color:white;padding:5px 10px;border:none;border-radius:5px;cursor:pointer;">Mark Completed</button>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Mark session as completed
+function completeSession(index) {
+    let sessions = JSON.parse(localStorage.getItem("sessions") || "[]");
+    sessions[index].completed = true;
+    localStorage.setItem("sessions", JSON.stringify(sessions));
+    displaySessions();
+}
+
+// Initialize
+displaySessions();
+</script>
+
+</body>
+</html>
